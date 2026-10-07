@@ -1,0 +1,53 @@
+@model IEnumerable<PAW.Models.DTO.InventoryDTO>
+@{
+    ViewData["Title"] = "Inventory Page";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Inventory</h2>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Inventory ID</th>
+                            <th>Unit Price</th>
+                            <th>Units in Stock</th>
+                            <th>Last Updated</th>
+                            <th>Product ID</th>
+                            <th>Date Added</th>
+                            <th>Modified By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var inventory in Model)
+                            {
+                                <tr>
+                                    <td>@inventory.InventoryId</td>
+                                    <td>@inventory.UnitPrice</td>
+                                    <td>@inventory.UnitsInStock</td>
+                                    <td>@inventory.LastUpdated?.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td>@inventory.ProductId</td>
+                                    <td>@inventory.DateAdded?.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td>@inventory.ModifiedBy</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center">No inventory records found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

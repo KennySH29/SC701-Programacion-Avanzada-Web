@@ -1,0 +1,59 @@
+@model IEnumerable<PAW.Models.DTO.SupplierDTO>
+@{
+    ViewData["Title"] = "Supplier Page";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Suppliers</h2>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Supplier ID</th>
+                            <th>Supplier Name</th>
+                            <th>Contact Name</th>
+                            <th>Contact Title</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>City</th>
+                            <th>Country</th>
+                            <th>Last Modified</th>
+                            <th>Modified By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var supplier in Model)
+                            {
+                                <tr>
+                                    <td>@supplier.SupplierId</td>
+                                    <td><strong>@supplier.SupplierName</strong></td>
+                                    <td>@supplier.ContactName</td>
+                                    <td>@supplier.ContactTitle</td>
+                                    <td>@supplier.Phone</td>
+                                    <td>@supplier.Address</td>
+                                    <td>@supplier.City</td>
+                                    <td>@supplier.Country</td>
+                                    <td>@supplier.LastModified?.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td>@supplier.ModifiedBy</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="10" class="text-center">No suppliers found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

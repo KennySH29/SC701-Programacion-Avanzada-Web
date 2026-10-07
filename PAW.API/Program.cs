@@ -15,6 +15,14 @@ builder.Services.AddDbContext<ProductDbContext>();
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IComponentRepository, ComponentRepository>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserActionRepository, UserActionRepository>();
+builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
 var app = builder.Build();
 

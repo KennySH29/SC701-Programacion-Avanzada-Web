@@ -1,0 +1,45 @@
+@model IEnumerable<PAW.Models.DTO.UserRoleDTO>
+@{
+    ViewData["Title"] = "User Role Page";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>User Roles</h2>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Rold ID</th>
+                            <th>User ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var userRole in Model)
+                            {
+                                <tr>
+                                    <td>@userRole.Id</td>
+                                    <td>@userRole.RoldId</td>
+                                    <td>@userRole.UserId</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center">No user roles found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,6 +9,14 @@ builder.Services.AddScoped<IRestProvider, RestProvider>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IComponentService, ComponentService>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserActionService, UserActionService>();
+builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 
 var app = builder.Build();
 

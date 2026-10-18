@@ -20,40 +20,81 @@ namespace PAW.API.Controllers
         public async Task<ActionResult<ProductDTO>> GetById(int id)
         {
             var product = await productRepository.FindAsync(id);
-            return ProductDTO.ConvertFrom(product);
+            if (product == null)
+                return NotFound();
+            return Ok(ProductDTO.ConvertFrom(product));
         }
-
-        /*[HttpPost("filter", Name = "FilterProducts")]
-        public async Task<IEnumerable<Product>> Filter(ConditionViewModel condition)
-        {
-            var predicate = ConditionResolver<Product>.ResolveCondition(condition.Criteria, condition.Property, condition.Value, condition.Start, condition.End);
-            var results = await businessProduct.Filter(predicate);
-            return results;
-        }*/
 
         [HttpPost]
-        public async Task<bool> Save([FromBody] IEnumerable<Product> Products)
+        public async Task<ActionResult<bool>> Create([FromBody] ProductDTO productDTO)
         {
-            foreach (var p in Products)
+            var product = ProductDTO.ConvertTo(productDTO);
+            product.ProductId = 0; // Ensure the ProductId is set to 0 for new products
+            product.LastModified = DateTime.Now;
+            var result = await productRepository.CreateAsync(product);
+
+            return Ok(result);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<bool>> Delete(int id)
+        {
+            var product = await productRepository.FindAsync(id);
+
+            if (product == null)
             {
-                if (p.ProductId > 0)
-                    await productRepository.CreateAsync(p);
-                else await productRepository.UpdateAsync(p);
+                return NotFound();
             }
 
-            /*Products.ToList().ForEach(async x =>
-            {
-                if (x.Id > 0)
-                    await productRepository.CreateAsync(x);
-                else await productRepository.UpdateAsync(x);
-            });*/
-            return true;
+            var result = await productRepository.DeleteAsync(product);
+            return Ok(result);
+
         }
 
-        [HttpDelete]
-        public async Task<bool> Delete(Product Product)
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<bool>> Update(int id, [FromBody] ProductDTO productDTO)
         {
-            return await productRepository.DeleteAsync(Product);
+            var product =
+                await productRepository.FindAsync(id);
+
+            if (product == null)
+                return NotFound();
+
+
+            product.ProductName =
+                productDTO.Name;
+
+            product.Description =
+                productDTO.Description;
+
+            product.Rating =
+                productDTO.Rating;
+
+            product.CategoryId =
+                productDTO.CategoryId;
+
+            product.SupplierId =
+                productDTO.SupplierId;
+
+            product.InventoryId =
+                productDTO.InventoryId;
+
+            product.CreatedBy =
+                productDTO.CreatedBy;
+
+            product.ModifiedBy =
+                productDTO.ModifiedBy;
+
+            product.LastModified =
+                DateTime.Now;
+
+
+            var result =
+                await productRepository.UpdateAsync(product);
+
+            return Ok(result);
         }
+
     }
 }
+ 

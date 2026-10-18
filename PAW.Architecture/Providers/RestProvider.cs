@@ -52,27 +52,29 @@ public class RestProvider : IRestProvider
 	/// <param name="endpoint">The endpoint for the GET request.</param>
 	/// <param name="id">The ID of the resource to retrieve. Can be null if not applicable.</param>
 	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	public async Task<string> GetAsync(string endpoint, string? id)
-	{
-		try
-		{
-			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-				.GetAsync(id);
-			return await RestProviderHelpers.GetResponse(response);
-		}
-		catch (Exception ex)
-		{
-			throw RestProviderHelpers.ThrowError(endpoint, ex);
-		}
-	}
+    public async Task<string> GetAsync(string endpoint, string? id)
+    {
+        try
+        {
+            var client = RestProviderHelpers.CreateHttpClient(endpoint);
 
-	/// <summary>
-	/// Creates a resource asynchronously.
-	/// </summary>
-	/// <param name="endpoint">The endpoint for the POST request.</param>
-	/// <param name="content">The content to send in the request body.</param>
-	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	public async Task<string> PostAsync(string endpoint, string content)
+            var response = await client.GetAsync(id ?? string.Empty);
+
+            return await RestProviderHelpers.GetResponse(response);
+        }
+        catch (Exception ex)
+        {
+            throw RestProviderHelpers.ThrowError(endpoint, ex);
+        }
+    }
+
+    /// <summary>
+    /// Creates a resource asynchronously.
+    /// </summary>
+    /// <param name="endpoint">The endpoint for the POST request.</param>
+    /// <param name="content">The content to send in the request body.</param>
+    /// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
+    public async Task<string> PostAsync(string endpoint, string content)
 	{
 		try
 		{

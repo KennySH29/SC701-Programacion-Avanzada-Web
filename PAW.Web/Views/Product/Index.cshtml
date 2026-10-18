@@ -8,10 +8,11 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Products</h2>
 
-        <a asp-action="Create" class="btn btn-primary">
+        <!-- Modificado: De enlace de redirección a botón CRUD con data-url -->
+        <button class="btn btn-primary btn-crud" data-url="@Url.Action("Create", "Product")">
             <i class="bi bi-plus-circle"></i>
             Add Product
-        </a>
+        </button>
     </div>
 
     <div class="card shadow-sm">
@@ -27,9 +28,7 @@
                             <th>Name</th>
                             <th>Description</th>
                             <th>Rating</th>
-                            <th>Comments</th>
                             <th>Created By</th>
-                            <th>Created Date</th>
                             <th>Modified By</th>
                             <th>Modified Date</th>
                             <th class="text-center">Actions</th>
@@ -71,15 +70,7 @@
                                     </td>
 
                                     <td>
-                                        @product.Comments
-                                    </td>
-
-                                    <td>
                                         @product.CreatedBy
-                                    </td>
-
-                                    <td>
-                                        @product.CreatedDate.ToString("yyyy-MM-dd HH:mm")
                                     </td>
 
                                     <td>
@@ -94,26 +85,23 @@
 
                                         <div class="btn-group" role="group">
 
-                                            <!-- Edit -->
-                                            <a asp-action="Edit"
-                                               asp-route-id="@product.Id"
-                                               class="btn btn-sm btn-warning">
+                                            <!-- Modificado: Edit (Ahora es botón interactivo) -->
+                                            <button class="btn btn-sm btn-warning btn-crud"
+                                                    data-url="@Url.Action("Edit", "Product", new { id = product.ProductId })">
                                                 Edit
-                                            </a>
+                                            </button>
 
-                                            <!-- Details -->
-                                            <a asp-action="Details"
-                                               asp-route-id="@product.Id"
-                                               class="btn btn-sm btn-info">
+                                            <!-- Modificado: Details (Ahora es botón interactivo) -->
+                                            <button class="btn btn-sm btn-info text-white btn-crud"
+                                                    data-url="@Url.Action("Details", "Product", new { id = product.ProductId })">
                                                 Details
-                                            </a>
+                                            </button>
 
-                                            <!-- Delete -->
-                                            <a asp-action="Delete"
-                                               asp-route-id="@product.Id"
-                                               class="btn btn-sm btn-danger">
+                                            <!-- Modificado: Delete (Ahora es botón interactivo) -->
+                                            <button class="btn btn-sm btn-danger btn-crud"
+                                                    data-url="@Url.Action("Delete", "Product", new { id = product.ProductId })">
                                                 Delete
-                                            </a>
+                                            </button>
 
                                         </div>
 
@@ -135,9 +123,125 @@
 
                 </table>
 
+                @{
+                    int currentPage = ViewBag.CurrentPage;
+                    int totalPages = ViewBag.TotalPages;
+                }
+
+                @if (totalPages > 1)
+                {
+                    <nav aria-label="Product pagination">
+                        <ul class="pagination justify-content-center">
+
+                            <!-- FIRST -->
+                            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="1">
+                                    First
+                                </a>
+                            </li>
+
+
+                            <!-- PREVIOUS -->
+                            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="@(currentPage - 1)">
+                                    Previous
+                                </a>
+                            </li>
+
+
+                            <!-- PRIMERA PÁGINA -->
+                            <li class="page-item @(currentPage == 1 ? "active" : "")">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="1">
+                                    1
+                                </a>
+                            </li>
+
+
+                            <!-- ... IZQUIERDA -->
+                            @if (currentPage > 3)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+
+
+                            <!-- PÁGINA ANTERIOR, ACTUAL Y SIGUIENTE -->
+                            @{
+                                int startPage =
+                                    Math.Max(2, currentPage - 1);
+
+                                int endPage =
+                                    Math.Min(totalPages - 1, currentPage + 1);
+                            }
+
+                            @for (int i = startPage; i <= endPage; i++)
+                            {
+                                <li class="page-item @(i == currentPage ? "active" : "")">
+                                    <a class="page-link"
+                                       asp-action="Index"
+                                       asp-route-page="@i">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+
+
+                            <!-- ... DERECHA -->
+                            @if (currentPage < totalPages - 2)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+
+
+                            <!-- ÚLTIMA PÁGINA -->
+                            @if (totalPages > 1)
+                            {
+                                <li class="page-item @(currentPage == totalPages ? "active" : "")">
+                                    <a class="page-link"
+                                       asp-action="Index"
+                                       asp-route-page="@totalPages">
+                                        @totalPages
+                                    </a>
+                                </li>
+                            }
+
+
+                            <!-- NEXT -->
+                            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="@(currentPage + 1)">
+                                    Next
+                                </a>
+                            </li>
+
+
+                            <!-- LAST -->
+                            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="@totalPages">
+                                    Last
+                                </a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                }
+
             </div>
 
         </div>
     </div>
 
 </div>
+

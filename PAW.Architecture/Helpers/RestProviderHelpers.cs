@@ -13,20 +13,28 @@ internal static class RestProviderHelpers
 	/// </summary>
 	/// <param name="endpoint">The base URL for the HTTP client.</param>
 	/// <returns>A configured instance of <see cref="HttpClient"/>.</returns>
-	internal static HttpClient CreateHttpClient(string endpoint)
-	{
-		var client = new HttpClient { BaseAddress = new Uri(endpoint) };
-		client.DefaultRequestHeaders.Accept.Clear();
-		client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-		return client;
-	}
+    internal static HttpClient CreateHttpClient(string endpoint)
+    {
+        var baseAddress = endpoint.TrimEnd('/') + "/";
 
-	/// <summary>
-	/// Creates a <see cref="StringContent"/> object for the specified content.
-	/// </summary>
-	/// <param name="content">The content to be sent in the HTTP request body.</param>
-	/// <returns>A <see cref="StringContent"/> object with the specified content.</returns>
-	internal static StringContent CreateContent(string content) => new(content, Encoding.UTF8, "application/json");
+        var client = new HttpClient
+        {
+            BaseAddress = new Uri(baseAddress)
+        };
+
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+
+        return client;
+    }
+
+    /// <summary>
+    /// Creates a <see cref="StringContent"/> object for the specified content.
+    /// </summary>
+    /// <param name="content">The content to be sent in the HTTP request body.</param>
+    /// <returns>A <see cref="StringContent"/> object with the specified content.</returns>
+    internal static StringContent CreateContent(string content) => new(content, Encoding.UTF8, "application/json");
 
 	/// <summary>
 	/// Reads the response from an HTTP request and ensures the response was successful.

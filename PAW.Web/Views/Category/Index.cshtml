@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PAW.Models.DTO.CategoryDTO>
+@model IEnumerable<PAW.Models.DTO.CategoryDTO>
 @{
     ViewData["Title"] = "Category Page";
 }
@@ -8,10 +8,10 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Categories</h2>
 
-        <a asp-action="Create" class="btn btn-primary">
+        <button class="btn btn-primary btn-crud" data-url="@Url.Action("Create", "Category")">
             <i class="bi bi-plus-circle"></i>
             Add Category
-        </a>
+        </button>
     </div>
 
     <div class="card shadow-sm">
@@ -26,8 +26,6 @@
                             <th>Category ID</th>
                             <th>Name</th>
                             <th>Description</th>
-                            <th>Comments</th>
-                            <th>Created Date</th>
                             <th>Modified By</th>
                             <th>Modified Date</th>
                             <th class="text-center">Actions</th>
@@ -41,72 +39,35 @@
                             foreach (var category in Model)
                             {
                                 <tr>
-
-                                    <td>
-                                        @category.CategoryId
-                                    </td>
-
-                                    <td>
-                                        <strong>@category.Name</strong>
-                                    </td>
-
-                                    <td>
-                                        @category.Description
-                                    </td>
-
-                                    <td>
-                                        @category.Comments
-                                    </td>
-
-                                    <td>
-                                        @category.CreatedDate.ToString("yyyy-MM-dd HH:mm")
-                                    </td>
-
-                                    <td>
-                                        @category.ModifiedBy
-                                    </td>
-
-                                    <td>
-                                        @category.ModifiedDate.ToString("yyyy-MM-dd HH:mm")
-                                    </td>
-
+                                    <td>@category.CategoryId</td>
+                                    <td><strong>@category.Name</strong></td>
+                                    <td>@category.Description</td>
+                                    <td>@category.ModifiedBy</td>
+                                    <td>@category.ModifiedDate.ToString("yyyy-MM-dd HH:mm")</td>
                                     <td class="text-center">
-
                                         <div class="btn-group" role="group">
-
-                                            <!-- Edit -->
-                                            <a asp-action="Edit"
-                                               asp-route-id="@category.Id"
-                                               class="btn btn-sm btn-warning">
+                                            <button class="btn btn-sm btn-warning btn-crud"
+                                                    data-url="@Url.Action("Edit", "Category", new { id = category.CategoryId })">
                                                 Edit
-                                            </a>
-
-                                            <!-- Details -->
-                                            <a asp-action="Details"
-                                               asp-route-id="@category.Id"
-                                               class="btn btn-sm btn-info">
+                                            </button>
+                                            <button class="btn btn-sm btn-info text-white btn-crud"
+                                                    data-url="@Url.Action("Details", "Category", new { id = category.CategoryId })">
                                                 Details
-                                            </a>
-
-                                            <!-- Delete -->
-                                            <a asp-action="Delete"
-                                               asp-route-id="@category.Id"
-                                               class="btn btn-sm btn-danger">
+                                            </button>
+                                            <button class="btn btn-sm btn-danger btn-crud"
+                                                    data-url="@Url.Action("Delete", "Category", new { id = category.CategoryId })">
                                                 Delete
-                                            </a>
-
+                                            </button>
                                         </div>
-
                                     </td>
-
                                 </tr>
                             }
                         }
                         else
                         {
                             <tr>
-                                <td colspan="10" class="text-center">
-                                    No products found.
+                                <td colspan="6" class="text-center">
+                                    No categories found.
                                 </td>
                             </tr>
                         }
@@ -114,6 +75,69 @@
                     </tbody>
 
                 </table>
+
+                @{
+                    int currentPage = ViewBag.CurrentPage;
+                    int totalPages = ViewBag.TotalPages;
+                }
+
+                @if (totalPages > 1)
+                {
+                    <nav aria-label="Category pagination">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="1">First</a>
+                            </li>
+                            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)">Previous</a>
+                            </li>
+
+                            <li class="page-item @(currentPage == 1 ? "active" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="1">1</a>
+                            </li>
+
+                            @if (currentPage > 3)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+
+                            @{
+                                int startPage = Math.Max(2, currentPage - 1);
+                                int endPage = Math.Min(totalPages - 1, currentPage + 1);
+                            }
+
+                            @for (int i = startPage; i <= endPage; i++)
+                            {
+                                <li class="page-item @(i == currentPage ? "active" : "")">
+                                    <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                                </li>
+                            }
+
+                            @if (currentPage < totalPages - 2)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+
+                            @if (totalPages > 1)
+                            {
+                                <li class="page-item @(currentPage == totalPages ? "active" : "")">
+                                    <a class="page-link" asp-action="Index" asp-route-page="@totalPages">@totalPages</a>
+                                </li>
+                            }
+
+                            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)">Next</a>
+                            </li>
+                            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="@totalPages">Last</a>
+                            </li>
+                        </ul>
+                    </nav>
+                }
 
             </div>
 

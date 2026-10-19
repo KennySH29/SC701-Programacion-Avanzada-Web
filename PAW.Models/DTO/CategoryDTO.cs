@@ -1,18 +1,21 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PAW.Models.DTO;
 
 public class CategoryDTO
 {
     [JsonPropertyName("id")]
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
 
     [JsonPropertyName("categoryId")]
     public int CategoryId { get; set; }
 
+    [Required]
     [JsonPropertyName("name")]
     public string Name { get; set; }
 
+    [Required]
     [JsonPropertyName("description")]
     public string Description { get; set; }
 
@@ -20,10 +23,10 @@ public class CategoryDTO
     public string? ModifiedBy { get; set; }
 
     [JsonPropertyName("comments")]
-    public string Comments { get; set; }
+    public string? Comments { get; set; }
 
     [JsonPropertyName("createdDate")]
-    public DateTime CreatedDate { get; set; }
+    public DateTime? CreatedDate { get; set; }
 
     [JsonPropertyName("modifiedDate")]
     public DateTime ModifiedDate { get; set; }

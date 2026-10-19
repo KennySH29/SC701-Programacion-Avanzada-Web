@@ -142,7 +142,6 @@
                                 </a>
                             </li>
 
-
                             <!-- PREVIOUS -->
                             <li class="page-item @(currentPage == 1 ? "disabled" : "")">
                                 <a class="page-link"
@@ -163,7 +162,7 @@
                             </li>
 
 
-                            <!-- ... IZQUIERDA -->
+                            <!-- ... ANTES DE LA PÁGINA ACTUAL -->
                             @if (currentPage > 3)
                             {
                                 <li class="page-item disabled">
@@ -172,7 +171,6 @@
                             }
 
 
-                            <!-- PÁGINA ANTERIOR, ACTUAL Y SIGUIENTE -->
                             @{
                                 int startPage =
                                     Math.Max(2, currentPage - 1);
@@ -181,6 +179,8 @@
                                     Math.Min(totalPages - 1, currentPage + 1);
                             }
 
+
+                            <!-- ANTERIOR / ACTUAL / SIGUIENTE -->
                             @for (int i = startPage; i <= endPage; i++)
                             {
                                 <li class="page-item @(i == currentPage ? "active" : "")">
@@ -193,7 +193,7 @@
                             }
 
 
-                            <!-- ... DERECHA -->
+                            <!-- ... DESPUÉS DE LA PÁGINA ACTUAL -->
                             @if (currentPage < totalPages - 2)
                             {
                                 <li class="page-item disabled">

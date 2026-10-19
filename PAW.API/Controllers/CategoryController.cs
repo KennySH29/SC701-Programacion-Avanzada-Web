@@ -20,40 +20,50 @@ namespace PAW.API.Controllers
         public async Task<ActionResult<CategoryDTO>> GetById(int id)
         {
             var category = await categoryRepository.FindAsync(id);
-            return CategoryDTO.ConvertFrom(category);
+            if (category == null)
+                return NotFound();
+            return Ok(CategoryDTO.ConvertFrom(category));
         }
-
-        /*[HttpPost("filter", Name = "FilterCategories")]
-        public async Task<IEnumerable<Category>> Filter(ConditionViewModel condition)
-        {
-            var predicate = ConditionResolver<Category>.ResolveCondition(condition.Criteria, condition.Property, condition.Value, condition.Start, condition.End);
-            var results = await businessCategory.Filter(predicate);
-            return results;
-        }*/
 
         [HttpPost]
-        public async Task<bool> Save([FromBody] IEnumerable<Category> Categories)
+        public async Task<ActionResult<bool>> Create([FromBody] CategoryDTO categoryDTO)
         {
-            foreach (var c in Categories)
-            {
-                if (c.CategoryId > 0)
-                    await categoryRepository.CreateAsync(c);
-                else await categoryRepository.UpdateAsync(c);
-            }
+            var category = CategoryDTO.ConvertTo(categoryDTO);
+            category.CategoryId = 0;
+            category.LastModified = DateTime.Now;
+            var result = await categoryRepository.CreateAsync(category);
 
-            /*Categories.ToList().ForEach(async x =>
-            {
-                if (x.Id > 0)
-                    await categoryRepository.CreateAsync(x);
-                else await categoryRepository.UpdateAsync(x);
-            });*/
-            return true;
+            return Ok(result);
         }
 
-        [HttpDelete]
-        public async Task<bool> Delete(Category Category)
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<bool>> Update(int id, [FromBody] CategoryDTO categoryDTO)
         {
-            return await categoryRepository.DeleteAsync(Category);
+            var category = await categoryRepository.FindAsync(id);
+
+            if (category == null)
+                return NotFound();
+
+            category.CategoryName = categoryDTO.Name;
+            category.Description = categoryDTO.Description;
+            category.ModifiedBy = categoryDTO.ModifiedBy;
+            category.LastModified = DateTime.Now;
+
+            var result = await categoryRepository.UpdateAsync(category);
+
+            return Ok(result);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<bool>> Delete(int id)
+        {
+            var category = await categoryRepository.FindAsync(id);
+
+            if (category == null)
+                return NotFound();
+
+            var result = await categoryRepository.DeleteAsync(category);
+            return Ok(result);
         }
     }
 }

@@ -44,13 +44,13 @@ namespace PAW.Web.Controllers
                 (int)Math.Ceiling(
                     totalItems / (double)pageSize);
 
-            // No permitir páginas menores a 1
+            // Evitar páginas menores a 1
             if (page < 1)
             {
                 page = 1;
             }
 
-            // No permitir páginas mayores a la última
+            // Evitar páginas mayores a la última
             if (totalPages > 0 && page > totalPages)
             {
                 page = totalPages;

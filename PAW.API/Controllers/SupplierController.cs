@@ -19,7 +19,57 @@ namespace PAW.API.Controllers
         public async Task<ActionResult<SupplierDTO>> GetById(int id)
         {
             var supplier = await supplierRepository.FindAsync(id);
-            return SupplierDTO.ConvertFrom(supplier);
+            if (supplier == null)
+                return NotFound();
+            return Ok(SupplierDTO.ConvertFrom(supplier));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<bool>> Create([FromBody] SupplierDTO supplierDTO)
+        {
+            var supplier = SupplierDTO.ConvertTo(supplierDTO);
+            supplier.SupplierId = 0; // Ensure the SupplierId is set to 0 for new suppliers
+            supplier.LastModified = DateTime.Now;
+            var result = await supplierRepository.CreateAsync(supplier);
+
+            return Ok(result);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<bool>> Delete(int id)
+        {
+            var supplier = await supplierRepository.FindAsync(id);
+
+            if (supplier == null)
+            {
+                return NotFound();
+            }
+
+            var result = await supplierRepository.DeleteAsync(supplier);
+            return Ok(result);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<bool>> Update(int id, [FromBody] SupplierDTO supplierDTO)
+        {
+            var supplier = await supplierRepository.FindAsync(id);
+
+            if (supplier == null)
+                return NotFound();
+
+            supplier.SupplierName = supplierDTO.SupplierName;
+            supplier.ContactName = supplierDTO.ContactName;
+            supplier.ContactTitle = supplierDTO.ContactTitle;
+            supplier.Phone = supplierDTO.Phone;
+            supplier.Address = supplierDTO.Address;
+            supplier.City = supplierDTO.City;
+            supplier.Country = supplierDTO.Country;
+            supplier.ModifiedBy = supplierDTO.ModifiedBy;
+            supplier.LastModified = DateTime.Now;
+
+            var result = await supplierRepository.UpdateAsync(supplier);
+
+            return Ok(result);
         }
     }
 }

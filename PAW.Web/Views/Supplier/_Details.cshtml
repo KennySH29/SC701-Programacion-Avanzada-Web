@@ -1,0 +1,68 @@
+@model PAW.Models.DTO.SupplierDTO
+
+<div class="modal-body p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <span class="text-muted small text-uppercase">Technical Sheet</span>
+            <h4 class="fw-bold m-0 text-primary">@Model.SupplierName</h4>
+        </div>
+        <span class="badge bg-light text-dark border p-2">ID: #@Model.SupplierId</span>
+    </div>
+
+    <div class="table-responsive bg-white rounded border p-2">
+        <table class="table table-sm table-borderless align-middle m-0">
+            <tbody>
+                <tr>
+                    <td class="text-muted w-35">Supplier ID</td>
+                    <td class="fw-semibold">@Model.SupplierId</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Supplier Name</td>
+                    <td class="fw-semibold">@Model.SupplierName</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Contact Name</td>
+                    <td class="fw-semibold">@Model.ContactName</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Contact Title</td>
+                    <td class="fw-semibold">@Model.ContactTitle</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Phone</td>
+                    <td class="fw-semibold">@Model.Phone</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Address</td>
+                    <td class="text-secondary text-wrap">@Model.Address</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">City</td>
+                    <td class="fw-semibold">@Model.City</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Country</td>
+                    <td class="fw-semibold">@Model.Country</td>
+                </tr>
+                <tr><td colspan="2"><hr class="text-muted opacity-25 my-2"></td></tr>
+                <tr>
+                    <td class="text-muted">Modified By</td>
+                    <td class="small">@Model.ModifiedBy</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Last Modified</td>
+                    <td class="small">@Model.LastModified?.ToString("yyyy-MM-dd HH:mm")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <button type="button"
+            class="btn btn-dark btn-switch-to-edit"
+            data-url="@Url.Action("Edit", "Supplier", new { id = Model.SupplierId })">
+        Edit Supplier
+    </button>
+</div>

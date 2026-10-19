@@ -7,6 +7,10 @@ namespace PAW.Web.Services;
 public interface IInventoryService
 {
     Task<IEnumerable<InventoryDTO>> GetInventoriesAsync();
+    Task<InventoryDTO> GetInventoryByIdAsync(int id);
+    Task<bool> CreateInventoryAsync(InventoryDTO inventory);
+    Task<bool> UpdateInventoryAsync(InventoryDTO inventory);
+    Task<bool> DeleteInventoryAsync(int id);
 }
 
 public class InventoryService : ServiceBase, IInventoryService
@@ -24,5 +28,37 @@ public class InventoryService : ServiceBase, IInventoryService
         var response = await _restProvider.GetAsync(SetPathUrl(_path), id: null);
         var inventories = await JsonProvider.DeserializeAsync<IEnumerable<InventoryDTO>>(response);
         return inventories;
+    }
+
+    public async Task<InventoryDTO> GetInventoryByIdAsync(int id)
+    {
+        var response = await _restProvider.GetAsync(SetPathUrl(_path), id.ToString());
+        var inventory = await JsonProvider.DeserializeAsync<InventoryDTO>(response);
+        return inventory;
+    }
+
+    public async Task<bool> CreateInventoryAsync(InventoryDTO inventory)
+    {
+        var json = JsonProvider.Serialize(inventory);
+        await _restProvider.PostAsync(SetPathUrl(_path), json);
+        return true;
+    }
+
+    public async Task<bool> UpdateInventoryAsync(InventoryDTO inventory)
+    {
+        var json = JsonProvider.Serialize(inventory);
+
+        await _restProvider.PutAsync(
+            SetPathUrl(_path),
+            inventory.InventoryId.ToString(),
+            json);
+
+        return true;
+    }
+
+    public async Task<bool> DeleteInventoryAsync(int id)
+    {
+        await _restProvider.DeleteAsync(SetPathUrl(_path), id.ToString());
+        return true;
     }
 }

@@ -1,0 +1,263 @@
+@model PAW.Models.DTO.UserDTO
+
+@{
+    var role =
+        ViewBag.Role as PAW.Models.DTO.RoleDTO;
+}
+
+
+<div class="modal-body p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+
+            <span class="text-muted small text-uppercase">
+                User Details
+            </span>
+
+            <h4 class="fw-bold m-0 text-primary">
+                @Model.Username
+            </h4>
+
+        </div>
+
+
+        @if (Model.IsActive == true)
+        {
+            <span class="badge bg-success p-2">
+                Active
+            </span>
+        }
+        else
+        {
+            <span class="badge bg-secondary p-2">
+                Inactive
+            </span>
+        }
+
+    </div>
+
+
+    <div class="table-responsive bg-white rounded border p-2">
+
+        <table class="table table-sm table-borderless align-middle m-0">
+
+            <tbody>
+
+
+                <!-- USER ID -->
+                <tr>
+
+                    <td class="text-muted">
+                        User ID
+                    </td>
+
+                    <td class="fw-semibold">
+                        @Model.UserId
+                    </td>
+
+                </tr>
+
+
+                <!-- USERNAME -->
+                <tr>
+
+                    <td class="text-muted">
+                        Username
+                    </td>
+
+                    <td class="fw-semibold">
+                        @Model.Username
+                    </td>
+
+                </tr>
+
+
+                <!-- EMAIL -->
+                <tr>
+
+                    <td class="text-muted">
+                        Email
+                    </td>
+
+                    <td>
+                        @Model.Email
+                    </td>
+
+                </tr>
+
+
+                <!-- ROLE -->
+                <tr>
+
+                    <td class="text-muted">
+                        Role
+                    </td>
+
+                    <td>
+
+                        @if (role != null)
+                        {
+                            <span>
+                                @role.RoleName
+                                (#@role.RoleId)
+                            </span>
+                        }
+                        else if (Model.RoleId != null)
+                        {
+                            <span>
+                                Role ID: @Model.RoleId
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                Not assigned
+                            </span>
+                        }
+
+                    </td>
+
+                </tr>
+
+
+                <!-- STATUS -->
+                <tr>
+
+                    <td class="text-muted">
+                        Status
+                    </td>
+
+                    <td>
+
+                        @if (Model.IsActive == true)
+                        {
+                            <span class="badge bg-success">
+                                Active
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                Inactive
+                            </span>
+                        }
+
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td colspan="2">
+                        <hr class="text-muted opacity-25 my-2" />
+                    </td>
+
+                </tr>
+
+
+                <!-- CREATED AT -->
+                <tr>
+
+                    <td class="text-muted">
+                        Created At
+                    </td>
+
+                    <td>
+                        @Model.CreatedAt?.ToString(
+                            "yyyy-MM-dd HH:mm")
+                    </td>
+
+                </tr>
+
+
+                <!-- LAST MODIFIED -->
+                <tr>
+
+                    <td class="text-muted">
+                        Last Modified
+                    </td>
+
+                    <td>
+                        @Model.LastModified?.ToString(
+                            "yyyy-MM-dd HH:mm")
+                    </td>
+
+                </tr>
+
+
+                <!-- MODIFIED BY -->
+                <tr>
+
+                    <td class="text-muted">
+                        Modified By
+                    </td>
+
+                    <td>
+                        @Model.ModifiedBy
+                    </td>
+
+                </tr>
+
+
+                <!-- LAST MODIFIED BY -->
+                <tr>
+
+                    <td class="text-muted">
+                        Last Modified By
+                    </td>
+
+                    <td>
+                        @Model.LastModifiedBy
+                    </td>
+
+                </tr>
+
+
+                <!-- PASSWORD -->
+                <tr>
+
+                    <td class="text-muted">
+                        Password
+                    </td>
+
+                    <td>
+                        <span class="badge bg-secondary">
+                            Protected / Hashed
+                        </span>
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<div class="modal-footer">
+
+    <button type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal">
+        Close
+    </button>
+
+
+    <button type="button"
+            class="btn btn-dark btn-switch-to-edit"
+            data-url="@Url.Action(
+                        "Edit",
+                        "User",
+                        new { id = Model.UserId })">
+
+        Edit User
+
+    </button>
+
+</div>

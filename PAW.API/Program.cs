@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using PAW.DataAccess.MSSQL;
 using PAW.DataAccess.Repositories;
+using PAW.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +26,10 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserActionRepository, UserActionRepository>();
 builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+
+builder.Services.AddScoped<
+    IPasswordHasher<User>,
+    PasswordHasher<User>>();
 
 var app = builder.Build();
 

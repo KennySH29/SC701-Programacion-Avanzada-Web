@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PAW.Models;
 using PAW.Repositories;
 
@@ -10,6 +11,7 @@ public interface IComponentRepository : IRepositoryBase<Component>
     Task<bool> DeleteAsync(Component entity);
     Task<IEnumerable<Component>> ReadAsync();
     Task<Component> FindAsync(int id);
+    Task<Component?> FindByIdAsync(decimal id);
     Task<bool> UpdateAsync(Component entity);
     Task<bool> UpdateManyAsync(IEnumerable<Component> entities);
     Task<bool> ExistsAsync(Component entity);
@@ -17,4 +19,12 @@ public interface IComponentRepository : IRepositoryBase<Component>
 
 public class ComponentRepository : RepositoryBase<Component>, IComponentRepository
 {
+    public async Task<Component?> FindByIdAsync(
+        decimal id)
+    {
+        return await DbContext
+            .Set<Component>()
+            .FirstOrDefaultAsync(
+                component => component.Id == id);
+    }
 }

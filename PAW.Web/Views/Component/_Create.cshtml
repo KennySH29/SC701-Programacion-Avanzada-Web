@@ -1,0 +1,85 @@
+@model PAW.Models.DTO.ComponentDTO
+
+<form asp-action="Create"
+      method="post"
+      id="formCreateComponent">
+
+    @Html.AntiForgeryToken()
+
+
+    <div class="modal-body">
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3">
+        </div>
+
+
+        <!-- NAME -->
+        <div class="mb-3">
+
+            <label asp-for="Name"
+                   class="form-label">
+                Name
+            </label>
+
+            <input asp-for="Name"
+                   class="form-control"
+                   maxlength="50"
+                   required />
+
+            <span asp-validation-for="Name"
+                  class="text-danger">
+            </span>
+
+            <div class="form-text">
+                Maximum 50 characters.
+            </div>
+
+        </div>
+
+
+        <!-- CONTENT -->
+        <div class="mb-3">
+
+            <label asp-for="Content"
+                   class="form-label">
+                Content
+            </label>
+
+            <textarea asp-for="Content"
+                      class="form-control"
+                      rows="4"
+                      maxlength="100"
+                      required>
+            </textarea>
+
+            <span asp-validation-for="Content"
+                  class="text-danger">
+            </span>
+
+            <div class="form-text">
+                Maximum 100 characters.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="modal-footer">
+
+        <button type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal">
+            Cancel
+        </button>
+
+
+        <button type="submit"
+                class="btn btn-primary">
+            Create
+        </button>
+
+    </div>
+
+</form>

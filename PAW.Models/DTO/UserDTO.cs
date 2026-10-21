@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 
+
 namespace PAW.Models.DTO;
 
 public class UserDTO
@@ -15,6 +16,8 @@ public class UserDTO
 
     [JsonPropertyName("passwordHash")]
     public string? PasswordHash { get; set; }
+
+    public string? Password { get; set; }
 
     [JsonPropertyName("createdAt")]
     public DateTime? CreatedAt { get; set; }

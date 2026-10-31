@@ -17,6 +17,25 @@ builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserActionService, UserActionService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
+builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
+
+builder.Services.AddHttpClient<TipoCambioClient>(client =>
+{
+    client.BaseAddress =
+        new Uri("https://api.hacienda.go.cr/");
+
+    client.Timeout = TimeSpan.FromSeconds(10);
+
+    client.DefaultRequestHeaders.UserAgent.ParseAdd(
+        "Mozilla/5.0 (compatible; PAW/1.0)");
+
+    client.DefaultRequestHeaders.Accept.ParseAdd(
+        "application/json");
+
+    client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(
+        "es-CR,es;q=0.9");
+});
+
 
 var app = builder.Build();
 
@@ -27,6 +46,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+//Nuevo clase para el servicio de tipo de cambio: Clase 4
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -38,5 +59,17 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapGet(
+    "/exchange-rate",
+    async (
+        IExchangeRateService service,
+        CancellationToken ct) =>
+    {
+        var result =
+            await service.GetExchangeRateAsync(ct);
+
+        return Results.Ok(result);
+    });
 
 app.Run();

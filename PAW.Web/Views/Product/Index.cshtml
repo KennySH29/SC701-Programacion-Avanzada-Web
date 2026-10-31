@@ -1,9 +1,14 @@
-﻿@model IEnumerable<PAW.Models.DTO.ProductDTO>
+﻿@model PAW.Web.Models.ProductViewModel
 @{
     ViewData["Title"] = "Product Page";
 }
 
 <div class="container mt-4">
+    <!-- 
+    @await Html.PartialAsync(
+        "ExchangeRate",
+        Model.TipoCambio)
+-->
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Products</h2>
@@ -37,9 +42,9 @@
 
                     <tbody>
 
-                        @if (Model != null && Model.Any())
+                        @if (Model.Products != null && Model.Products.Any())
                         {
-                            foreach (var product in Model)
+                            foreach (var product in Model.Products)
                             {
                                 <tr>
 

@@ -1,32 +1,51 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using PAW.Web.Models;
+using PAW.Web.Services;
 
-namespace PAW.Web.Controllers
+namespace PAW.Web.Controllers;
+
+public class HomeController : ControllerBase
 {
-    public class HomeController : Controller
+    private readonly ILogger<HomeController> _logger;
+
+    public HomeController(
+        IExchangeRateService exchangeRateService,ILogger<HomeController> logger) : base(exchangeRateService)
     {
-        private readonly ILogger<HomeController> _logger;
+        _logger = logger;
+    }
 
-        public HomeController(ILogger<HomeController> logger)
+    public async Task<IActionResult> Index()
+    {
+        var viewModel = new HomeViewModel
         {
-            _logger = logger;
-        }
+            TipoCambio = await GetTipoCambioAsync()
+        };
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        return View(viewModel);
+    }
 
-        public IActionResult Privacy()
+    public async Task<IActionResult> Privacy()
+    {
+        var viewModel = new HomeViewModel
         {
-            return View();
-        }
+            TipoCambio = await GetTipoCambioAsync()
+        };
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        return View(viewModel);
+    }
+
+    [ResponseCache(
+        Duration = 0,
+        Location = ResponseCacheLocation.None,
+        NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+            RequestId =
+                Activity.Current?.Id
+                ?? HttpContext.TraceIdentifier
+        });
     }
 }

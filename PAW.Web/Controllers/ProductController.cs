@@ -9,7 +9,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace PAW.Web.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
@@ -17,7 +17,14 @@ namespace PAW.Web.Controllers
         private readonly IInventoryService _inventoryService;
         private readonly ILogger<ProductController> _logger;
 
-        public ProductController(IProductService productService, ICategoryService categoryService, ISupplierService supplierService, IInventoryService inventoryService, ILogger<ProductController> logger)
+        public ProductController(
+            IProductService productService,
+            ICategoryService categoryService,
+            ISupplierService supplierService,
+            IInventoryService inventoryService,
+            ILogger<ProductController> logger,
+            IExchangeRateService exchangeRateService)
+            : base(exchangeRateService)
         {
             _productService = productService;
             _categoryService = categoryService;
@@ -65,7 +72,13 @@ namespace PAW.Web.Controllers
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
 
-            return View(pagedProducts);
+            var viewModel = new ProductViewModel
+            {
+                Products = pagedProducts,
+                TipoCambio = await GetTipoCambioAsync()
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Details(int id)

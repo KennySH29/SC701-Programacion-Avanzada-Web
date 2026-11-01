@@ -27,6 +27,7 @@ public class TaskService : ServiceBase, ITaskService
     public TaskService(IRestProvider restProvider)
     {
         _restProvider = restProvider;
+        BaseUrl = "https://localhost:7244/";
     }
 
     public async Tasks.Task<IEnumerable<TaskDTO>> GetTasksAsync()

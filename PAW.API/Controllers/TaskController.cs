@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using PAW.DataAccess.Repositories;
 using PAW.Models.DTO;
-using Tasks = System.Threading.Tasks;
+//using Tasks = System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace PAW.API.Controllers
 {
@@ -12,7 +13,7 @@ namespace PAW.API.Controllers
         ITaskRepository taskRepository) : ControllerBase
     {
         [HttpGet(Name = "GetTasks")]
-        public async Tasks.Task<IEnumerable<TaskDTO>> GetAll()
+        public async Task<IEnumerable<TaskDTO>> GetAll()
         {
             var tasks = await taskRepository.ReadAsync() ?? [];
 
@@ -20,7 +21,7 @@ namespace PAW.API.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetTaskById")]
-        public async Tasks.Task<ActionResult<TaskDTO>> GetById(int id)
+        public async Task<ActionResult<TaskDTO>> GetById(int id)
         {
             var task = await taskRepository.FindAsync(id);
 
@@ -33,7 +34,7 @@ namespace PAW.API.Controllers
         }
 
         [HttpPost]
-        public async Tasks.Task<ActionResult<bool>> Create(
+        public async Task<ActionResult<bool>> Create(
             [FromBody] TaskDTO taskDTO)
         {
             var task = TaskDTO.ConvertTo(taskDTO);
@@ -55,7 +56,7 @@ namespace PAW.API.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Tasks.Task<ActionResult<bool>> Update(
+        public async Task<ActionResult<bool>> Update(
             int id,
             [FromBody] TaskDTO taskDTO)
         {
@@ -82,7 +83,7 @@ namespace PAW.API.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public async Tasks.Task<ActionResult<bool>> Delete(int id)
+        public async Task<ActionResult<bool>> Delete(int id)
         {
             var task =
                 await taskRepository.FindAsync(id);

@@ -2,6 +2,7 @@
 using PAW.DataAccess.Repositories;
 using PAW.Models;
 using PAW.Models.DTO;
+using PAW.Tasks;
 
 namespace PAW.API.Controllers
 {
@@ -95,6 +96,17 @@ namespace PAW.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("/api/a")]
+        public async Task<IEnumerable<string>> GetSyncA(int id)
+        {
+            return await Sync.ExecuteItems(100, "AAA");
+        }
+
+        [HttpGet("/api/b")]
+        public IEnumerable<string> GetSyncB(int id)
+        {
+            Sync.ExecuteEval(5000000, "BBB");
+            return ["Your task was scheduled"];
+        }
     }
 }
- 
